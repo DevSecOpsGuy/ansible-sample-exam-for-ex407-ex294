@@ -5,8 +5,8 @@
 .vagrant
 *.vdi
 
-ssh-keys
+ssh-keys/*
 !ssh-keys/.gitkeep
 
-ansible
+ansible/*`
 !ansible/.gitkeep
