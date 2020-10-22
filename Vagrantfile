@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
     ansible2.vm.box = "centos/7"
     ansible2.vm.hostname = "ansible2.hl.local"
     ansible2.vm.network "private_network", ip: "172.16.10.12"
-    ansible2.vm.provision "file", source: "./ansible_exam.pub", destination: "/home/vagrant/.ssh/ansible_exam.pub"
+    ansible2.vm.provision "file", source: "./ssh-keys/ansible_exam.pub", destination: "/home/vagrant/.ssh/ansible_exam.pub"
     ansible2.vm.provision "shell", inline: <<-SHELL
       cat /home/vagrant/.ssh/ansible_exam.pub >> /home/vagrant/.ssh/authorized_keys
     SHELL
@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
     ansible3.vm.box = "centos/7"
     ansible3.vm.hostname = "ansible3.hl.local"
     ansible3.vm.network "private_network", ip: "172.16.10.13"
-    ansible3.vm.provision "file", source: "./ansible_exam.pub", destination: "/home/vagrant/.ssh/ansible_exam.pub"
+    ansible3.vm.provision "file", source: "./ssh-keys/ansible_exam.pub", destination: "/home/vagrant/.ssh/ansible_exam.pub"
     ansible3.vm.provision "shell", inline: <<-SHELL
       cat /home/vagrant/.ssh/ansible_exam.pub >> /home/vagrant/.ssh/authorized_keys
     SHELL
@@ -47,7 +47,7 @@ Vagrant.configure("2") do |config|
     ansible4.vm.box = "centos/7"
     ansible4.vm.hostname = "ansible4.hl.local"
     ansible4.vm.network "private_network", ip: "172.16.10.14"
-    ansible4.vm.provision "file", source: "./ansible_exam.pub", destination: "/home/vagrant/.ssh/ansible_exam.pub"
+    ansible4.vm.provision "file", source: "./ssh-keys/ansible_exam.pub", destination: "/home/vagrant/.ssh/ansible_exam.pub"
     ansible4.vm.provision "shell", inline: <<-SHELL
       cat /home/vagrant/.ssh/ansible_exam.pub >> /home/vagrant/.ssh/authorized_keys
     SHELL
@@ -68,8 +68,7 @@ Vagrant.configure("2") do |config|
     ansible5.vm.hostname = "ansible5.hl.local"
     ansible5.vm.network "private_network", ip: "172.16.10.15"
     ansible5.vm.disk :disk, name: "backup", size: "1GB"
-
-    ansible5.vm.provision "file", source: "./ansible_exam.pub", destination: "/home/vagrant/.ssh/ansible_exam.pub"
+    ansible5.vm.provision "file", source: "./ssh-keys/ansible_exam.pub", destination: "/home/vagrant/.ssh/ansible_exam.pub"
     ansible5.vm.provision "shell", inline: <<-SHELL
       cat /home/vagrant/.ssh/ansible_exam.pub >> /home/vagrant/.ssh/authorized_keys
     SHELL
@@ -97,7 +96,8 @@ Vagrant.configure("2") do |config|
     ansible_control.vm.box = "centos/7"
     ansible_control.vm.hostname = "ansible-control.hl.local"
     ansible_control.vm.network "private_network", ip: "172.16.10.11"
-    ansible_control.vm.provision "file", source: "./ansible_exam", destination: "/home/vagrant/.ssh/ansible_exam"
+    ansible_control.vagrant.plugins = [ "vagrant-vbguest" ]
+    ansible_control.vm.provision "file", source: "./ssh-keys/ansible_exam", destination: "/home/vagrant/.ssh/ansible_exam"
     ansible_control.vm.provision "shell", inline: <<-SHELL
       sudo yum -y install epel-release
       sudo yum -y install ansible
@@ -107,6 +107,10 @@ Vagrant.configure("2") do |config|
       echo "StrictHostKeyChecking no" >> /home/vagrant/.ssh/config
       for i in {12..15}; do ANSIBLE_HOST_KEY_CHECKING=false ansible -c ssh --private-key /home/vagrant/.ssh/ansible_exam -i "172.16.10.${i}," -u vagrant -m ping all; done;
     SHELL
+    ansible_control.vm.synced_folder "./ansible", "/ansible"
+    ansible_control.vm.provision :shell do |shell|
+      shell.inline = "sudo mount -t vboxsf -o uid=1000,gid=1000 ansible /ansible"
+    end    
     ansible_control.vm.provider :virtualbox do |vb|
       vb.name = "ansible-control.hl.local"
     end

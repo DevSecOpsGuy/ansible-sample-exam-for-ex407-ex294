@@ -15,8 +15,16 @@ Provides machines configuration
 ssh-keygen -f ./ssh-keys/ansible_exam -N "" -q
 ```
 
-- Run `vagrant`
+- Lift it up
 
 ```sh
 vagrant up
+```
+
+## **Runbook**
+
+- Check additional volumes were mounted
+
+```sh
+lsblk
 ```
