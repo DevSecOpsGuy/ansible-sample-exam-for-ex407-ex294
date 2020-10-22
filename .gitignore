@@ -8,5 +8,5 @@
 ssh-keys
 !ssh-keys/.gitkeep
 
-!ansible/.gitkeep
 ansible
+!ansible/.gitkeep
