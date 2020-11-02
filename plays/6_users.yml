@@ -1,0 +1,42 @@
+---
+- name: #6 Users and Groups
+  hosts:
+    - webservers
+    - database
+  
+  tasks:
+    - name: Create on webservers group
+      user:
+        name: "{{ item.username }}"
+        uid: "{{ item.uid }}"
+        password: "{{ user_password | password_hash('sha512') }}"
+        group: wheel
+        shell: /bin/bash
+      loop: "{{ users }}"
+      when: (item.uid | string).startswith('1') and inventory_hostname in groups.webservers
+
+    - name: Add ssh public key on webservers group
+      authorized_key:
+        user: "{{ item.username }}" 
+        state: present
+        key: "{{ lookup('file', 'id_rsa.pub') }}"
+      loop: "{{ users }}"
+      when: (item.uid | string).startswith('1') and inventory_hostname in groups.webservers
+
+    - name: Create on database group
+      user:
+        name: "{{ item.username }}"
+        uid: "{{ item.uid  }}"
+        password: "{{ user_password | password_hash('sha512') }}"
+        group: wheel
+        shell: /bin/bash
+      loop: "{{ users }}"
+      when: (item.uid | string).startswith('2') and inventory_hostname in groups.database
+      
+    - name: Add ssh public key on database group
+      authorized_key:
+        user: "{{ item.username }}" 
+        state: present
+        key: "{{ lookup('file', 'id_rsa.pub') }}"
+      loop: "{{ users }}"
+      when: (item.uid | string).startswith('2') and inventory_hostname in groups.database

@@ -1,0 +1,13 @@
+---
+- name: #7 Scheduled Tasks
+  hosts: all
+
+  tasks:
+    - name: Crontab on root
+      cron:
+        name: show date
+        hour: '*'
+        minute: '0'
+        job: "date >> /var/log/time.log"
+        user: root
+      when: inventory_hostname in groups.proxy

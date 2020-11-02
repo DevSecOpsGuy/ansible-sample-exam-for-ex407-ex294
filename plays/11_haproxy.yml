@@ -1,0 +1,45 @@
+---
+- name: #11 Download Roles From Ansible Galaxy and Use Them
+  hosts:
+    - proxy
+    - webservers
+
+  tasks:
+    - name: Get webservers IP address
+      set_fact:
+        nodes: "{% for host in groups['webservers'] %} {{ hostvars[host].ansible_all_ipv4_addresses | select('match', '^172.*') | list | join }}{% if not loop.last %},{% endif %}{% endfor %}"
+      with_items: "{{ groups['webservers'] }}"
+      when: inventory_hostname in groups['proxy']
+
+    - name: Set node list
+      set_fact:
+        nodes: "{{ nodes.split(',') }}"
+      when: inventory_hostname in groups['proxy']
+
+    - name: Include HAProxy role
+      include_role:
+        name: geerlingguy.haproxy
+      vars:
+        haproxy_backend_balance_method: roundrobin
+        haproxy_backend_servers:
+          - name: webserver0
+            address: "{{ nodes[0] }}:80"
+          - name: webserver1
+            address: "{{ nodes[1] }}:80"
+      when: inventory_hostname in groups['proxy']
+
+    - name: Enable firewalld
+      service:
+        name: firewalld
+        state: started
+        enabled: true
+      when: inventory_hostname in groups['proxy']
+
+    - name: Configure firewall
+      firewalld:
+        port: "80/tcp"
+        state: enabled
+        permanent: yes
+        zone: public
+        immediate: true
+      when: inventory_hostname in groups['proxy']

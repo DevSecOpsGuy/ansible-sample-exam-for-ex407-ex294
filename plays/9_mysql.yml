@@ -1,0 +1,6 @@
+---
+- name: #9 Create and Work with Roles
+  hosts: database
+
+  roles:
+    - sample-mysql

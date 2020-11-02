@@ -10,3 +10,8 @@ ssh-keys/*
 
 ansible/*`
 !ansible/.gitkeep
+
+id_rsa*
+vault_key
+
+plays/roles/geerlingguy.haproxy

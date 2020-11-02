@@ -1,0 +1,21 @@
+- name: #4 Configure SSH Server
+  hosts: all
+
+  tasks:
+    - name: configure ssh server
+      replace:
+        path: /etc/ssh/sshd_config
+        replace: '{{ item.text }}'
+        regexp: '{{ item.regex }}'
+      loop:
+        - regex: '^Banner none$'
+          text: '/etc/motd'
+        - regex: '^X11Forwarding yes$'
+          text: 'X11Forwarding no'
+        - regex: '.*MaxAuthTries.*'
+          text: 'MaxAuthTries 3'
+
+    - name: restart sshd service
+      service:
+        name: sshd
+        state: restarted

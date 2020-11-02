@@ -1,0 +1,12 @@
+---
+- name: #18 Create and Use Templates to Create Customised Configuration Files
+  hosts: all
+  
+  tasks:
+    - name: Crete server_list file
+      template:
+        src: templates/18_server_list.j2
+        dest: /etc/server_list.txt
+        owner: automation
+        mode: '0600'
+      when: inventory_hostname in groups['database']

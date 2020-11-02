@@ -1,0 +1,32 @@
+---
+- name: #15 Work with Ansible Facts
+  hosts: database
+
+  tasks:
+    - name: Create facts directory
+      file:
+        path: /etc/ansible/facts.d
+        state: directory
+
+    - name: Create facts file
+      file:
+        path: /etc/ansible/facts.d/custom.fact
+        state: touch
+        mode: '0755'
+
+    - name: Set fact
+      copy:
+        dest: /etc/ansible/facts.d/custom.fact
+        content: |
+          #!/bin/bash
+
+          echo "{ \"sample_exam\": { \"server_role\": \"mysql\" } }"
+
+    - name: Get setup
+      setup:
+        filter: "ansible_local"
+      register: __ansible_local_facts
+
+    - name: Print ansible_local facts
+      debug:
+        msg: "{{ __ansible_local_facts }}"

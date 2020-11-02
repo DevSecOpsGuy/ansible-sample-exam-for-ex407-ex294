@@ -1,0 +1,22 @@
+---
+- name: #14 Use Archiving
+  hosts: database
+
+  tasks:
+    - name: Create datalist file
+      file:      
+        path: /mnt/mysql_backups/database_list.txt
+        state: touch
+        mode: '0664'
+
+    - name: Add datalist file content
+      copy:
+        dest: /mnt/mysql_backups/database_list.txt
+        content: |
+          dev,test,qa,prod
+
+    - name: Create gzip of database_list file
+      archive:
+        path: /mnt/mysql_backups/database_list.txt
+        dest: /mnt/mysql_backups/archive.gz
+        format: gz

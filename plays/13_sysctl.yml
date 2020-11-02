@@ -1,0 +1,16 @@
+---
+- name: #13 Use Conditionals to Control Play Execution
+  hosts: all
+
+  tasks:
+    - name: Change vm.swappiness > 2048MB RAM
+      sysctl:
+        name: vm.swappiness
+        value: '10'
+        state: present
+      when: ansible_memtotal_mb > 2048
+
+    - name: Change vm.swappiness < 2048MB RAM
+      debug:
+        msg: "Server memory less than 2048MB"
+      when: ansible_memtotal_mb < 2048

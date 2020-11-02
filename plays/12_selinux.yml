@@ -1,0 +1,20 @@
+---
+- name: #12 Security
+  hosts: webservers
+
+  tasks:
+    - name: Enable SELinux
+      selinux:
+        policy: targeted
+        state: enforcing
+
+    - name: Install required package to handle SELinux
+      package:
+        name: libsemanage-python
+        state: present
+
+    - name: Enable httpd_can_network_connect SELinux boolean
+      seboolean:
+        name: httpd_can_network_connect
+        state: yes
+        persistent: yes

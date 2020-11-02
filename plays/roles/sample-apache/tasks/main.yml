@@ -1,0 +1,38 @@
+---
+- name: Install apache
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - httpd
+    - php
+    - mod_ssl
+
+- name: Enabled httpd
+  service:
+    name: httpd
+    enabled: true
+    state: started
+
+- name: Update index.html
+  template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+  notify: Restart httpd
+
+- name: Start firewalld service
+  service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Open mysql connections firewall
+  firewalld:
+    state: enabled
+    permanent: yes
+    port: "{{ item }}/tcp"
+    immediate: yes
+    zone: public
+  loop:
+    - 80
+    - 443

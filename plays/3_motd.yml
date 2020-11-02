@@ -1,0 +1,8 @@
+- name: #3 File Content
+  hosts: all
+
+  tasks:
+    - name: replace motd
+      template:
+        src: templates/2_motd.j2
+        dest: /etc/motd

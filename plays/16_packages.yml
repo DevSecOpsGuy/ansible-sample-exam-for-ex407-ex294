@@ -1,0 +1,21 @@
+---
+- name: #16 Software Packages
+  hosts: all
+
+  tasks:
+    - name: Install packages on proxy group
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - tcpdump
+        - mailx
+      when: inventory_hostname in groups['proxy']
+
+    - name: Install packages on database group
+      package:
+        name: "{{ item }}"
+      loop:
+        - lsof
+        - mailx
+      when: inventory_hostname in groups['database']

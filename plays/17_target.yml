@@ -1,0 +1,10 @@
+---
+- name: #17 Services
+  hosts: webservers
+
+  tasks:
+    - name: Set default boot target
+      systemd:
+        name: multi-user.target
+        state: started
+        enabled: True

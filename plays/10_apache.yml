@@ -1,0 +1,6 @@
+---
+- name: #10 Create and Work with Roles
+  hosts: webservers
+
+  roles:
+    - sample-apache
