@@ -11,9 +11,9 @@ Provides virtual machines to be able to successfully complete all questions and 
 
 - Generate ssh key pair
 
-```sh
-ssh-keygen -f ./ssh-keys/ansible_exam -N "" -q
-```
+  ```sh
+  ssh-keygen -f ./ssh-keys/ansible_exam -N "" -q
+  ```
 
 - Setting up the environment
 
