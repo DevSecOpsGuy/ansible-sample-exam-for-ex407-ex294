@@ -33,23 +33,23 @@ Provides virtual machines to be able to successfully complete all questions and 
 
 - Check additional volumes were mounted
 
-```sh
-lsblk
-```
+  ```sh
+  lsblk
+  ```
 
 - Replace `tab` with `spaces` for `vi`
 
-```sh
-echo "set expandtab
-set tabstop=2
-set shiftwidth=2" > ~/.vimrc
-```
+  ```sh
+  echo "set expandtab
+  set tabstop=2
+  set shiftwidth=2" > ~/.vimrc
+  ```
 
 - Verify `.ssh` permissions
 
-```sh
-chmod 700 ~/.ssh
-chmod 600 ~/.ssh/authorized_keys
-chmod 600 ~/.ssh/id_rsa
-chmod 644 ~/.ssh/id_rsa.pub
-```
+  ```sh
+  chmod 700 ~/.ssh
+  chmod 600 ~/.ssh/authorized_keys
+  chmod 600 ~/.ssh/id_rsa
+  chmod 644 ~/.ssh/id_rsa.pub
+  ```
