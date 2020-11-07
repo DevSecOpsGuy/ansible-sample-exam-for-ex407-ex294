@@ -6,6 +6,7 @@ Provides virtual machines to be able to successfully complete all questions and 
 
 - [Vagrant](https://www.vagrantup.com/)
 - [Virtualbox](https://www.virtualbox.org/)
+- [Ansible](https://github.com/ansible/ansible)
 
 ## **Playground**
 
