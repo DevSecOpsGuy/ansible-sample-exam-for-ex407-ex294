@@ -16,18 +16,18 @@ Provides virtual machines to be able to successfully complete all questions and 
   ssh-keygen -f ./ssh-keys/ansible_exam -N "" -q
   ```
 
-- Setting up the environment
-
-  - Bastion
-
-    ```sh
-    VAGRANT_VAGRANTFILE=bastion/Vagrantfile vagrant up
-    ```
+- Setting up the environment. **Note. Be sure `vagrant` version is compatible with your box provider**
 
   - Managed nodes
 
     ```sh
     VAGRANT_VAGRANTFILE=managed-nodes/Vagrantfile vagrant up
+    ```
+
+  - Bastion
+
+    ```sh
+    VAGRANT_VAGRANTFILE=bastion/Vagrantfile vagrant up
     ```
 
 ## **Tips**
